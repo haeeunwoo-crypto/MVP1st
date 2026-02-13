@@ -4,7 +4,8 @@ import {
   ChevronLeft, ChevronRight, CheckCircle, Video, Users, 
   FileText, PlayCircle, Search, Bell, Settings, X, Flame, 
   Calendar as CalendarIcon, PieChart, BookOpen, ArrowRight, MoreHorizontal,
-  Clock, CheckSquare, List, Grid, Star, AlertCircle, MessageSquare, Megaphone, HelpCircle, FileQuestion, ChevronDown, Volume2, FileBarChart, ExternalLink
+  Clock, CheckSquare, List, Grid, Star, AlertCircle, MessageSquare, Megaphone, HelpCircle, FileQuestion, ChevronDown, Volume2, FileBarChart, ExternalLink,
+  UploadCloud, FileCheck, Folder
 } from 'lucide-react';
 
 // --- [Mock Data] 주간 학습 시간표 데이터 ---
@@ -104,6 +105,21 @@ const weeklyLectures = [
     thumbnail: '/api/placeholder/120/68' 
   }
 ];
+
+// --- [Mock Data] 제출 필요한 과제 목록 (NEW) ---
+const pendingTasks = [
+  { id: 1, type: 'quiz', title: '3-5. SQL Quiz 5', deadline: '오늘 23:59까지', status: 'urgent' },
+  { id: 2, type: 'assignment', title: 'Python 데이터 전처리 과제', deadline: '내일 18:00까지', status: 'normal' },
+  { id: 3, type: 'project', title: '팀 프로젝트 중간 발표 자료', deadline: '2025.12.10', status: 'normal' },
+];
+
+// --- [Mock Data] 제출 완료 내역 (NEW) ---
+const submittedHistory = [
+  { id: 101, type: 'quiz', title: '3-4. SQL Quiz 4', submitDate: '2025.12.01', score: '10/10 (Pass)', status: 'graded' },
+  { id: 102, type: 'assignment', title: 'Python 기초 코딩 테스트', submitDate: '2025.11.28', score: '85/100', status: 'graded' },
+  { id: 103, type: 'project', title: '데이터 분석 기초 프로젝트', submitDate: '2025.11.20', score: '평가 중', status: 'pending' },
+];
+
 
 // --- [Mock Data] 전체 강의 리스트 (월별 그룹핑, 텍스트형) ---
 const allLecturesByMonth = [
@@ -647,21 +663,87 @@ export default function LMSDashboard() {
                         ))}
                       </div>
                     </div>
+
+                    {/* 4. Pending Tasks List (NEW SECTION) */}
+                    <div className="mt-8">
+                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <FileText size={20} className="text-rose-500" /> 제출이 필요한 항목
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {pendingTasks.map(task => (
+                          <div key={task.id} className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full group">
+                            <div>
+                              <div className="flex justify-between items-start mb-2">
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${task.type === 'quiz' ? 'bg-indigo-50 text-indigo-600' : task.type === 'assignment' ? 'bg-orange-50 text-orange-600' : 'bg-purple-50 text-purple-600'}`}>
+                                  {task.type === 'quiz' ? '퀴즈' : task.type === 'assignment' ? '과제' : '프로젝트'}
+                                </span>
+                                {task.status === 'urgent' && <span className="text-[10px] font-bold text-rose-500 flex items-center gap-1 animate-pulse"><AlertCircle size={10} /> 마감 임박</span>}
+                              </div>
+                              <h4 className="font-bold text-gray-800 text-lg leading-tight mb-1 group-hover:text-rose-600 transition-colors">{task.title}</h4>
+                              <p className="text-xs text-gray-500 font-medium mb-4">마감: {task.deadline}</p>
+                            </div>
+                            <button className="w-full bg-gray-50 hover:bg-rose-500 hover:text-white text-gray-600 text-sm font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2">
+                              <UploadCloud size={16} /> 제출하기
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </>
                 ) : (
-                  <div className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
-                    {/* ... All Lectures View ... */}
-                    <div className="p-6 border-b border-gray-100 bg-gray-50/50"><h3 className="font-bold text-gray-800 text-lg flex items-center gap-2"><List size={20} className="text-gray-500" /> 전체 강의 리스트</h3><p className="text-xs text-gray-500 mt-1">월별 커리큘럼 일정에 맞춰 수강해 주세요.</p></div>
-                    <div className="divide-y divide-gray-100">
-                      {allLecturesByMonth.map((group, gIdx) => (
-                        <div key={gIdx} className="p-6"><h4 className="text-sm font-extrabold text-rose-500 mb-4 bg-rose-50 w-fit px-3 py-1 rounded-full border border-rose-100">{group.month}</h4>
-                          <div className="space-y-1">
-                            {group.lectures.map((lec, lIdx) => (
-                              <div key={lIdx} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-xl transition-colors group"><div className="shrink-0 w-6 flex justify-center">{lec.status === 'completed' ? <CheckCircle size={20} className="text-emerald-500" /> : lec.status === 'locked' ? <div className="w-2 h-2 bg-gray-300 rounded-full"></div> : <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>}</div><div className="flex-1"><div className="flex items-center gap-2 mb-0.5"><span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${lec.type === 'live' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>{lec.type === 'live' ? 'LIVE' : 'VOD'}</span><span className={`text-sm font-medium ${lec.status === 'completed' ? 'text-gray-400 line-through decoration-gray-300' : 'text-gray-700'}`}>{lec.title}</span></div></div><div className="text-right text-xs font-medium text-gray-400 min-w-[80px]">{lec.status === 'completed' ? <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded">완료</span> : <span className="flex items-center justify-end gap-1">{lec.date ? <><CalendarIcon size={12} /> {lec.date} 예정</> : <><Clock size={12} /> {lec.time}</>}</span>}</div></div>
-                            ))}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left: All Lectures List (Existing) */}
+                    <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden h-fit">
+                      <div className="p-6 border-b border-gray-100 bg-gray-50/50"><h3 className="font-bold text-gray-800 text-lg flex items-center gap-2"><List size={20} className="text-gray-500" /> 전체 강의 리스트</h3><p className="text-xs text-gray-500 mt-1">월별 커리큘럼 일정에 맞춰 수강해 주세요.</p></div>
+                      <div className="divide-y divide-gray-100">
+                        {allLecturesByMonth.map((group, gIdx) => (
+                          <div key={gIdx} className="p-6"><h4 className="text-sm font-extrabold text-rose-500 mb-4 bg-rose-50 w-fit px-3 py-1 rounded-full border border-rose-100">{group.month}</h4>
+                            <div className="space-y-1">
+                              {group.lectures.map((lec, lIdx) => (
+                                <div key={lIdx} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-xl transition-colors group"><div className="shrink-0 w-6 flex justify-center">{lec.status === 'completed' ? <CheckCircle size={20} className="text-emerald-500" /> : lec.status === 'locked' ? <div className="w-2 h-2 bg-gray-300 rounded-full"></div> : <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>}</div><div className="flex-1"><div className="flex items-center gap-2 mb-0.5"><span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${lec.type === 'live' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>{lec.type === 'live' ? 'LIVE' : 'VOD'}</span><span className={`text-sm font-medium ${lec.status === 'completed' ? 'text-gray-400 line-through decoration-gray-300' : 'text-gray-700'}`}>{lec.title}</span></div></div><div className="text-right text-xs font-medium text-gray-400 min-w-[80px]">{lec.status === 'completed' ? <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded">완료</span> : <span className="flex items-center justify-end gap-1">{lec.date ? <><CalendarIcon size={12} /> {lec.date} 예정</> : <><Clock size={12} /> {lec.time}</>}</span>}</div></div>
+                              ))}
+                            </div>
                           </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right: Submission History (NEW SECTION) */}
+                    <div className="lg:col-span-1 space-y-6">
+                      <div className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden sticky top-6">
+                        <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+                          <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
+                            <Folder size={20} className="text-gray-500" /> 나의 제출 내역
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-1">과제, 프로젝트, 퀴즈 제출 이력입니다.</p>
                         </div>
-                      ))}
+                        <div className="p-4 space-y-3">
+                          {submittedHistory.map(item => (
+                            <div key={item.id} className="p-4 rounded-xl border border-gray-100 hover:border-rose-100 hover:bg-rose-50/30 transition-all group">
+                              <div className="flex justify-between items-start mb-2">
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${item.type === 'quiz' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : item.type === 'assignment' ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-purple-50 text-purple-600 border-purple-100'}`}>
+                                  {item.type === 'quiz' ? '퀴즈' : item.type === 'assignment' ? '과제' : '프로젝트'}
+                                </span>
+                                <span className={`text-xs font-bold ${item.status === 'graded' ? 'text-gray-900' : 'text-gray-400'}`}>
+                                  {item.score}
+                                </span>
+                              </div>
+                              <h4 className="text-sm font-bold text-gray-800 mb-1 group-hover:text-rose-600 transition-colors">{item.title}</h4>
+                              <div className="flex justify-between items-center text-xs text-gray-400 mt-2">
+                                <span>{item.submitDate} 제출됨</span>
+                                <button className="text-rose-500 hover:underline flex items-center gap-1">
+                                  <FileCheck size={12} /> 결과 보기
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="p-4 border-t border-gray-100">
+                          <button className="w-full text-xs font-bold text-gray-500 hover:text-gray-800 py-2">
+                            + 전체 이력 보기
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -669,6 +751,7 @@ export default function LMSDashboard() {
             )}
 
             {activeTab === 'portfolio' && (
+              // ... (Portfolio Code) ...
               // ================= PORTFOLIO VIEW (UPDATED STRUCTURE) =================
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 
@@ -814,6 +897,7 @@ export default function LMSDashboard() {
             )}
 
             {activeTab === 'notice' && (
+              // ... (Existing Notice Code) ...
               // ================= NOTICE VIEW =================
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 {/* ... (Existing Notice Code) ... */}
@@ -823,6 +907,7 @@ export default function LMSDashboard() {
             )}
 
             {activeTab === 'support' && (
+              // ... (Existing Support Code) ...
               // ================= SUPPORT CENTER VIEW =================
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 {/* ... (Existing Support Code) ... */}
@@ -893,7 +978,7 @@ export default function LMSDashboard() {
             {/* Modal Content - Recommendation Letter Image */}
             <div className="flex-1 overflow-y-auto bg-gray-100 flex justify-center p-4">
               <div className="bg-white shadow-lg w-full max-w-3xl">
-                {/*  */}
+                {/* */}
                 <img 
                   src="https://file.notion.so/f/f/e770305f-d227-463d-802f-22a36b328738/2df72fa0-949e-4c3d-b4ef-232145c2f826/%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp?id=288a7c29-37e4-42b7-b08e-8a0224b7428f&table=block&spaceId=e770305f-d227-463d-802f-22a36b328738&expirationTimestamp=1739599200000&signature=Y-17K_P9-Z-15_18-A-13-11-2025-13-13&downloadName=%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp" 
                   alt="인재추천서 예시" 
