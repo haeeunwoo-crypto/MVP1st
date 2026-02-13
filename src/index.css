@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* 스크롤바 숨기기 */
+  /* 가로 스크롤바 숨기기 (캘린더 영역 등) */
   .scrollbar-hide::-webkit-scrollbar {
       display: none;
   }
@@ -11,32 +11,21 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
   }
+}
 
-  /* 얇은 스크롤바 */
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full;
-  }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400;
-  }
-
-  /* 커스텀 스크롤바 */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full;
-  }
+/* 세로 스크롤바 얇게 커스텀 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e2e8f0;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #cbd5e1;
 }
 
 body {
