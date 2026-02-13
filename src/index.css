@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* 가로 스크롤바 숨기기 */
   .scrollbar-hide::-webkit-scrollbar {
       display: none;
   }
@@ -13,7 +12,6 @@
   }
 }
 
-/* 세로 스크롤바 커스텀 */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -29,5 +27,5 @@
 }
 
 body {
-  @apply bg-[#f8fafc];
+  @apply bg-slate-50;
 }
