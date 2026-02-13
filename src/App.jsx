@@ -5,7 +5,7 @@ import {
   FileText, PlayCircle, Search, Bell, Settings, X, Flame, 
   Calendar as CalendarIcon, PieChart, BookOpen, ArrowRight, MoreHorizontal,
   Clock, CheckSquare, List, Grid, Star, AlertCircle, MessageSquare, Megaphone, HelpCircle, FileQuestion, ChevronDown, Volume2, FileBarChart, ExternalLink,
-  UploadCloud, FileCheck, Folder
+  UploadCloud, FileCheck, Folder, TrendingUp, Activity
 } from 'lucide-react';
 
 // --- [Mock Data] 주간 학습 시간표 데이터 ---
@@ -402,19 +402,19 @@ export default function LMSDashboard() {
             {activeTab === 'home' && (
               // ================= DASHBOARD VIEW =================
               <>
-               {/* Top Row: Gamification & Success Vision */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* 캐릭터 위젯 */}
-                  <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 flex flex-col justify-center">
-                    <div className="flex justify-between items-start mb-5">
+               {/* 1. Top Row: Character & Success Vision */}
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                 {/* Character Widget (Left - 1 col) */}
+                 <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 flex flex-col justify-between">
+                    <div className="flex justify-between items-start">
                       <div>
-                        <span className="inline-block bg-rose-50 text-rose-600 text-xs font-bold px-2 py-1 rounded-md mb-2">Lv.3</span>
+                        <span className="inline-block bg-rose-50 text-rose-600 text-xs font-bold px-2 py-1 rounded mb-2">Lv.3</span>
                         <h3 className="text-lg font-bold text-gray-800 leading-tight">커널 도전자 김현우</h3>
                         <p className="text-xs text-gray-500 mt-1">데이터 사이언티스트 지망생</p>
                       </div>
                       <div className="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-2xl shadow-inner border border-rose-100">🥚</div>
                     </div>
-                    <div>
+                    <div className="mt-4">
                       <div className="flex justify-between text-[11px] mb-1 text-gray-500 font-bold">
                         <span>다음 레벨까지 250 XP</span>
                         <span className="text-gray-700">75%</span>
@@ -423,25 +423,48 @@ export default function LMSDashboard() {
                         <div className="bg-rose-500 h-full w-[75%] rounded-full"></div>
                       </div>
                     </div>
-                  </div>
+                 </div>
 
-                  {/* SUCCESS VISION */}
-                  <div className="lg:col-span-2 bg-slate-900 rounded-3xl p-6 shadow-lg relative overflow-hidden flex flex-col justify-center group">
-                    <div className="absolute right-0 top-0 w-80 h-80 bg-rose-500 rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-20 transition-opacity duration-700"></div>
-                    <div className="relative z-10">
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-rose-400 mb-3 border border-rose-500/30 bg-rose-500/10 w-fit px-2.5 py-1 rounded-lg">
-                        <Target size={14} /> SUCCESS VISION
-                      </span>
-                      <h2 className="text-lg lg:text-[20px] font-bold text-white leading-snug mb-4 tracking-tight">
-                        "데이터에 숨겨진 패턴을 발견하고 비즈니스 성장을<br/>이끄는 핵심 <span className="text-rose-400">데이터 사이언티스트</span>가 되겠다"
-                      </h2>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-medium text-slate-400">목표 달성 D-Day</span>
-                        <span className="text-xs font-bold text-slate-900 bg-white px-2.5 py-1 rounded-md">D-42</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                 {/* Success Vision (Right - 2 cols) */}
+                 <div className="lg:col-span-2 bg-slate-900 rounded-3xl p-8 shadow-lg relative overflow-hidden flex flex-col justify-center">
+                     <div className="absolute right-0 top-0 w-64 h-64 bg-rose-500 rounded-full opacity-10 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                     <div className="relative z-10">
+                       <span className="text-[10px] font-bold text-rose-400 border border-rose-500/30 bg-rose-500/10 px-2 py-1 rounded mb-3 inline-block">SUCCESS VISION</span>
+                       <h2 className="text-xl font-bold text-white leading-snug mb-6">"데이터에 숨겨진 패턴을 발견하고 비즈니스 성장을<br/>이끄는 핵심 <span className="text-rose-400">데이터 사이언티스트</span>가 되겠다"</h2>
+                       <div className="flex items-center gap-2">
+                          <span className="text-xs text-slate-400 font-medium">목표 달성 D-Day</span>
+                          <span className="text-xs font-bold text-slate-900 bg-white px-2 py-0.5 rounded">D-42</span>
+                       </div>
+                     </div>
+                 </div>
+               </div>
+
+               {/* 2. Middle Row: Learning Rates */}
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                   {/* Weekly Rate */}
+                   <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 flex flex-col justify-center">
+                       <div className="flex justify-between items-end mb-3">
+                          <h4 className="font-bold text-gray-700 flex items-center gap-2"><Activity size={20} className="text-emerald-500"/> 주간 학습 완료율</h4>
+                          <span className="text-3xl font-extrabold text-emerald-500">85%</span>
+                       </div>
+                       <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-2">
+                          <div className="bg-emerald-500 h-full rounded-full" style={{width: '85%'}}></div>
+                       </div>
+                       <p className="text-xs text-gray-400">이번 주 목표 달성까지 3개 남았습니다.</p>
+                   </div>
+
+                   {/* Total Rate */}
+                   <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 flex flex-col justify-center">
+                       <div className="flex justify-between items-end mb-3">
+                          <h4 className="font-bold text-gray-700 flex items-center gap-2"><TrendingUp size={20} className="text-blue-500"/> 전체 학습 진도율</h4>
+                          <span className="text-3xl font-extrabold text-blue-500">42%</span>
+                       </div>
+                       <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden mb-2">
+                          <div className="bg-blue-500 h-full rounded-full" style={{width: '42%'}}></div>
+                       </div>
+                       <p className="text-xs text-gray-400">수료 기준(80%)까지 화이팅하세요!</p>
+                   </div>
+               </div>
 
                 {/* Attendance Widget */}
                 <section className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6">
@@ -492,6 +515,7 @@ export default function LMSDashboard() {
                       </div>
                       <div className="grid grid-cols-7 gap-2 text-center">
                         {['일','월','화','수','목','금','토'].map(d => <div key={d} className="text-xs text-gray-400 font-bold py-2">{d}</div>)}
+                        {/* Mock Calendar Grid */}
                         {Array.from({length: 30}).map((_, i) => {
                           const day = i + 1;
                           let status = 'none';
@@ -603,6 +627,7 @@ export default function LMSDashboard() {
             )}
 
             {activeTab === 'classroom' && (
+              // ... (Classroom content remains same)
               // ================= MY CLASSROOM VIEW (UPDATED ORDER) =================
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 
@@ -978,7 +1003,7 @@ export default function LMSDashboard() {
             {/* Modal Content - Recommendation Letter Image */}
             <div className="flex-1 overflow-y-auto bg-gray-100 flex justify-center p-4">
               <div className="bg-white shadow-lg w-full max-w-3xl">
-                {/* */}
+                {/*  */}
                 <img 
                   src="https://file.notion.so/f/f/e770305f-d227-463d-802f-22a36b328738/2df72fa0-949e-4c3d-b4ef-232145c2f826/%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp?id=288a7c29-37e4-42b7-b08e-8a0224b7428f&table=block&spaceId=e770305f-d227-463d-802f-22a36b328738&expirationTimestamp=1739599200000&signature=Y-17K_P9-Z-15_18-A-13-11-2025-13-13&downloadName=%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp" 
                   alt="인재추천서 예시" 
