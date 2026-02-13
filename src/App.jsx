@@ -5,7 +5,7 @@ import {
   FileText, PlayCircle, Search, Bell, Settings, X, Flame, 
   Calendar as CalendarIcon, PieChart, BookOpen, ArrowRight, MoreHorizontal,
   Clock, CheckSquare, List, Grid, Star, AlertCircle, MessageSquare, Megaphone, HelpCircle, FileQuestion, ChevronDown, Volume2, FileBarChart, ExternalLink,
-  UploadCloud, FileCheck, Folder, TrendingUp, Activity
+  UploadCloud, FileCheck, Folder, TrendingUp, Activity, MapPin
 } from 'lucide-react';
 
 // --- [Mock Data] 주간 학습 시간표 데이터 ---
@@ -41,7 +41,14 @@ const scheduleData = {
     task: { id: 't3', title: '3-6. SQL Quiz 6', type: 'submit', status: 'pending', taskGoal: '오늘 진행한 코딩테스트 문제 중 틀린 문제를 다시 풀고 리뷰를 제출합니다.' }
   },
   '목': {
-    morning: { id: 'm4', title: '데이터 분석가가 되기 위한 준비 SQL 코딩테스트', type: 'live', status: 'pending', learningGoal: '프로그래머스와 해커랭크 스타일의 실전 SQL 문제를 풀이하며 실전 감각을 극대화합니다.' },
+    morning: { 
+      id: 'm4', 
+      title: '데이터 분석가가 되기 위한 준비 SQL 코딩테스트', 
+      type: 'offline', // Changed to offline
+      status: 'pending', 
+      learningGoal: '프로그래머스와 해커랭크 스타일의 실전 SQL 문제를 풀이하며 실전 감각을 극대화합니다.',
+      location: '강남 캠퍼스 11층 302호' // Added location info
+    },
     afternoon: { id: 'a4', title: '데이터 분석가가 되기 위한 준비 SQL 코딩테스트', type: 'live', status: 'pending', learningGoal: '오전 코딩테스트 결과를 바탕으로 강사님의 해설 강의를 듣고 최적화된 쿼리 작성법을 배웁니다.' },
     night: { id: 'n4', title: 'SQL 실무 적용 실습', type: 'vod', status: 'pending', learningGoal: '해설 강의 내용을 복습하며 본인만의 SQL 코드 스니펫을 정리합니다.' },
     task: { id: 't4', title: '3-7. SQL Quiz 7', type: 'submit', status: 'pending', taskGoal: '주간 학습 내용을 총정리하는 종합 SQL 퀴즈를 제출합니다.' }
@@ -211,6 +218,7 @@ export default function LMSDashboard() {
       case 'live': baseStyle += 'bg-emerald-50/80 border-emerald-200 text-emerald-900 hover:bg-emerald-100/80'; break;
       case 'peer': baseStyle += 'bg-purple-50/80 border-purple-200 text-purple-900 hover:bg-purple-100/80'; break;
       case 'submit': baseStyle += 'bg-orange-50/80 border-orange-200 text-orange-900 hover:bg-orange-100/80'; break;
+      case 'offline': baseStyle += 'bg-slate-100 border-slate-300 text-slate-700 hover:bg-slate-200'; break; // 오프라인 스타일 추가
       default: baseStyle += 'bg-white border-gray-200 text-gray-700 hover:bg-slate-50';
     }
     if (event.status === 'live') baseStyle += ' ring-2 ring-emerald-400 shadow-md';
@@ -227,6 +235,7 @@ export default function LMSDashboard() {
       case 'live': style += 'bg-emerald-100 text-emerald-700 border-emerald-200'; text = '🔴 LIVE'; break;
       case 'peer': style += 'bg-purple-100 text-purple-700 border-purple-200'; text = '💬 PEER'; break;
       case 'submit': style += 'bg-rose-100 text-rose-700 border-rose-200'; text = '📝 과제'; break;
+      case 'offline': style += 'bg-slate-200 text-slate-700 border-slate-300'; text = '🏢 오프라인'; break; // 오프라인 뱃지 추가
       default: style += 'bg-gray-100 text-gray-600 border-gray-200'; text = '기타';
     }
     return <div className={style}>{text}</div>;
@@ -544,6 +553,13 @@ export default function LMSDashboard() {
                   <div className="px-6 py-4 flex flex-col md:flex-row md:justify-between items-start md:items-center border-b border-gray-200 bg-white gap-3">
                     <div><h2 className="text-lg font-bold text-gray-900">주간 학습 시간표</h2></div>
                     <div className="flex items-center gap-4">
+                      <div className="flex gap-3 text-[11px] font-bold text-gray-500 hidden xl:flex">
+                        <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded bg-blue-100 border border-blue-300"></div>온라인(VOD)</span>
+                        <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded bg-emerald-100 border border-emerald-300"></div>실시간(Live)</span>
+                        <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded bg-slate-400 border border-slate-500"></div>오프라인</span>
+                        <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded bg-purple-100 border border-purple-300"></div>피어세션</span>
+                        <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded bg-rose-100 border border-rose-300"></div>과제/제출</span>
+                      </div>
                       <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
                         <button className="p-1 text-gray-500 hover:text-gray-900 hover:bg-white rounded-md transition-all"><ChevronLeft size={16} /></button>
                         <span className="text-[13px] font-bold px-3 text-gray-700">Week 6 (12.1 ~ 12.5)</span>
@@ -948,7 +964,7 @@ export default function LMSDashboard() {
       {selectedEvent && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setSelectedEvent(null)}>
           <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 transform transition-all" onClick={e => e.stopPropagation()}>
-            <div className={`h-3 w-full ${selectedEvent.type === 'live' ? 'bg-emerald-500' : selectedEvent.type === 'submit' ? 'bg-rose-500' : selectedEvent.type === 'peer' ? 'bg-purple-500' : 'bg-blue-500'}`}></div>
+            <div className={`h-3 w-full ${selectedEvent.type === 'live' ? 'bg-emerald-500' : selectedEvent.type === 'submit' ? 'bg-rose-500' : selectedEvent.type === 'peer' ? 'bg-purple-500' : selectedEvent.type === 'offline' ? 'bg-slate-500' : 'bg-blue-500'}`}></div>
             <div className="p-8">
               <div className="flex justify-between items-start mb-6">
                 <div className="pr-4">
@@ -962,7 +978,10 @@ export default function LMSDashboard() {
                   <X size={20} />
                 </button>
               </div>
+
               <div className="py-2 space-y-6">
+                
+                {/* 학습 목표 및 과제 목표 노출 박스 */}
                 <div className="bg-[#f8fafc] p-6 rounded-2xl border border-gray-200 shadow-sm">
                   {selectedEvent.learningGoal && (
                     <div className={selectedEvent.taskGoal ? "mb-5" : ""}>
@@ -976,10 +995,54 @@ export default function LMSDashboard() {
                       <p className="text-[14px] text-gray-700 leading-relaxed font-medium break-keep">{selectedEvent.taskGoal}</p>
                     </div>
                   )}
+                  
+                  {/* Location Info for Offline */}
+                  {selectedEvent.location && (
+                    <div className="mb-4 p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+                        <div className="p-2 bg-white rounded-full border border-gray-100 shadow-sm text-slate-500">
+                            <MapPin size={20} />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-gray-500">강의장 정보</p>
+                            <p className="text-sm font-bold text-gray-800">{selectedEvent.location}</p>
+                        </div>
+                    </div>
+                  )}
                 </div>
-                <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 flex justify-center items-center gap-2">
-                  바로 이동하기 <ArrowRight size={18}/>
-                </button>
+
+                {selectedEvent.status === 'completed' ? (
+                   <button className="w-full bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold hover:bg-slate-200 transition-colors text-[15px]">
+                     복습하기
+                   </button>
+                ) : (
+                  <>
+                    {selectedEvent.type === 'live' && (
+                      <button className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <Video size={20} /> 실시간(Zoom) 입장하기
+                      </button>
+                    )}
+                    {selectedEvent.type === 'vod' && (
+                      <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <PlayCircle size={20} /> 강의 수강하기
+                      </button>
+                    )}
+                    {selectedEvent.type === 'submit' && (
+                      <button className="w-full bg-rose-500 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-rose-600 transition-all shadow-lg shadow-rose-200 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <FileText size={20} /> 과제 작성 및 제출
+                      </button>
+                    )}
+                    {selectedEvent.type === 'peer' && (
+                      <button className="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-purple-700 transition-all shadow-lg shadow-purple-200 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <Users size={20} /> 멘토링/실습 입장
+                      </button>
+                    )}
+                    {selectedEvent.type === 'offline' && (
+                      <button className="w-full bg-slate-700 text-white py-4 rounded-2xl font-bold text-[15px] hover:bg-slate-600 transition-all shadow-lg shadow-slate-300 flex justify-center items-center gap-2 transform hover:-translate-y-0.5">
+                        <MapPin size={22} /> 강의장 약도 보기
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1003,7 +1066,7 @@ export default function LMSDashboard() {
             {/* Modal Content - Recommendation Letter Image */}
             <div className="flex-1 overflow-y-auto bg-gray-100 flex justify-center p-4">
               <div className="bg-white shadow-lg w-full max-w-3xl">
-                {/*  */}
+                {/* */}
                 <img 
                   src="https://file.notion.so/f/f/e770305f-d227-463d-802f-22a36b328738/2df72fa0-949e-4c3d-b4ef-232145c2f826/%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp?id=288a7c29-37e4-42b7-b08e-8a0224b7428f&table=block&spaceId=e770305f-d227-463d-802f-22a36b328738&expirationTimestamp=1739599200000&signature=Y-17K_P9-Z-15_18-A-13-11-2025-13-13&downloadName=%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8C%E1%85%A2%E1%84%8E%E1%85%AE%E1%84%8E%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5_%E1%84%8B%E1%85%A8%E1%84%89%E1%85%B5.webp" 
                   alt="인재추천서 예시" 
