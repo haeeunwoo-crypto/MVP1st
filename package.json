@@ -1,5 +1,5 @@
 {
-  "name": "kernel-lms-student-dashboard",
+  "name": "kernel-lms-dashboard-pro",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -16,6 +16,8 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
